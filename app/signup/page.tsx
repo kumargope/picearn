@@ -1,12 +1,12 @@
 "use client";
 
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
 import BannerAd from "@/components/ads/BannerAd";
 
-export default function SignupPage() {
+function SignupForm() {
   const searchParams = useSearchParams();
 
   const referralCode = searchParams.get("ref") || "";
@@ -19,15 +19,10 @@ export default function SignupPage() {
     e.preventDefault();
 
     try {
-      console.log("========== SIGNUP START ==========");
-
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
-
-      console.log("Signup Result:", data);
-      console.log("Signup Error:", error);
 
       if (error) throw error;
 
@@ -36,29 +31,15 @@ export default function SignupPage() {
         return;
       }
 
-      console.log("User ID:", data.user.id);
-
-      //----------------------------------
-      // Save Name
-      //----------------------------------
-
-      const { error: profileError } = await supabase
+      await supabase
         .from("profiles")
         .update({
           name,
         })
         .eq("id", data.user.id);
 
-      console.log("Profile Update Error:", profileError);
-
-      //----------------------------------
-      // Apply Referral
-      //----------------------------------
-
       if (referralCode) {
-        console.log("Referral Code:", referralCode);
-
-        const res = await fetch("/api/referral/apply", {
+        await fetch("/api/referral/apply", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -68,23 +49,12 @@ export default function SignupPage() {
             newUserId: data.user.id,
           }),
         });
-
-        console.log("API Status:", res.status);
-
-        const response = await res.json();
-
-        console.log("API Response:", response);
-      } else {
-        console.log("No Referral Code");
       }
 
       toast.success("Account Created Successfully");
 
       // window.location.href = "/dashboard";
-
     } catch (err: unknown) {
-      console.error("Signup Error:", err);
-
       toast.error(
         err instanceof Error ? err.message : "Signup Failed"
       );
@@ -93,15 +63,12 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-black px-6 py-10">
-
-      {/* Top Banner */}
       <div className="mx-auto mb-8 max-w-6xl">
         <BannerAd position="top" />
       </div>
 
       <div className="flex justify-center">
         <div className="w-full max-w-md rounded-2xl bg-zinc-900 p-8 shadow-xl">
-
           <h1 className="mb-2 text-4xl font-bold text-white">
             Create Account
           </h1>
@@ -116,21 +83,15 @@ export default function SignupPage() {
                 Referral Code Applied
               </p>
 
-              <p className="mt-1 text-white">
-                {referralCode}
-              </p>
+              <p className="mt-1 text-white">{referralCode}</p>
             </div>
           )}
 
-          {/* Middle Banner */}
           <div className="mb-6">
             <BannerAd position="middle" />
           </div>
 
-          <form
-            onSubmit={handleSignup}
-            className="space-y-5"
-          >
+          <form onSubmit={handleSignup} className="space-y-5">
             <input
               type="text"
               placeholder="Full Name"
@@ -160,20 +121,25 @@ export default function SignupPage() {
 
             <button
               type="submit"
-              className="w-full rounded-xl bg-blue-600 py-4 font-bold text-white transition hover:bg-blue-700"
+              className="w-full rounded-xl bg-blue-600 py-4 font-bold text-white hover:bg-blue-700"
             >
               Create Account
             </button>
           </form>
 
-          {/* Bottom Banner */}
           <div className="mt-8">
             <BannerAd position="bottom" />
           </div>
-
         </div>
       </div>
-
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+      <SignupForm />
+    </Suspense>
   );
 }
