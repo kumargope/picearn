@@ -1,12 +1,23 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
+
+interface ImageItem {
+  id: string;
+  slug: string;
+  title: string;
+  image_url: string;
+  views: number;
+  description?: string;
+  tags?: string;
+}
 
 export default async function SearchPage({
   searchParams,
@@ -15,7 +26,7 @@ export default async function SearchPage({
 }) {
   const { q } = await searchParams;
 
-  let images: any[] = [];
+  let images: ImageItem[] = [];
 
   if (q) {
     const { data } = await supabase
@@ -26,7 +37,7 @@ export default async function SearchPage({
       )
       .order("created_at", { ascending: false });
 
-    images = data || [];
+    images = (data as ImageItem[]) || [];
   }
 
   return (
@@ -34,7 +45,6 @@ export default async function SearchPage({
       <Navbar />
 
       <main className="mx-auto max-w-7xl px-6 py-12">
-
         <h1 className="mb-8 text-5xl font-bold">
           Search Images
         </h1>
@@ -52,7 +62,7 @@ export default async function SearchPage({
           />
 
           <button
-            className="rounded-xl bg-blue-600 px-8 font-bold"
+            className="rounded-xl bg-blue-600 px-8 font-bold text-white"
           >
             Search
           </button>
@@ -64,22 +74,30 @@ export default async function SearchPage({
           </p>
         )}
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {images.length === 0 && q && (
+          <div className="rounded-xl bg-zinc-900 p-8 text-center text-zinc-400">
+            No images found.
+          </div>
+        )}
 
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {images.map((image) => (
             <Link
               key={image.id}
               href={`/v/${image.slug}`}
-              className="overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900"
+              className="overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900 transition hover:scale-[1.02]"
             >
-              <img
-                src={image.image_url}
-                alt={image.title}
-                className="h-56 w-full object-cover"
-              />
+              <div className="relative h-56 w-full">
+                <Image
+                  src={image.image_url}
+                  alt={image.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 25vw"
+                />
+              </div>
 
               <div className="p-4">
-
                 <h2 className="font-bold">
                   {image.title}
                 </h2>
@@ -87,14 +105,10 @@ export default async function SearchPage({
                 <p className="mt-2 text-sm text-zinc-400">
                   👁 {image.views}
                 </p>
-
               </div>
-
             </Link>
           ))}
-
         </div>
-
       </main>
 
       <Footer />
