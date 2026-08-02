@@ -1,6 +1,7 @@
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
@@ -100,7 +101,7 @@ export const metadata: Metadata = {
     },
   },
 
-  // ✅ Monetag Verification
+  // Monetag Verification
   other: {
     monetag: "1386d3fe6e17abbf91b3984e7b808cb0",
   },
@@ -125,7 +126,16 @@ export default function RootLayout({
       <body className="min-h-screen bg-black text-white">
         <AuthProvider>
 
+          {/* Google Analytics */}
           <GoogleAnalytics />
+
+          {/* Monetag Multitag */}
+          <Script
+            src="https://quge5.com/88/tag.min.js"
+            data-zone="266097"
+            strategy="afterInteractive"
+            async
+          />
 
           {children}
 
