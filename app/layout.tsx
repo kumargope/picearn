@@ -1,9 +1,9 @@
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/contexts/AuthContext";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -135,6 +135,7 @@ export default function RootLayout({
             data-zone="266097"
             strategy="afterInteractive"
             async
+            data-cfasync="false"
           />
 
           {children}
