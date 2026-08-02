@@ -1,4 +1,3 @@
-
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -101,6 +100,11 @@ export const metadata: Metadata = {
     },
   },
 
+  // ✅ Monetag Verification
+  other: {
+    monetag: "1386d3fe6e17abbf91b3984e7b808cb0",
+  },
+
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -121,7 +125,8 @@ export default function RootLayout({
       <body className="min-h-screen bg-black text-white">
         <AuthProvider>
 
-           <GoogleAnalytics />
+          <GoogleAnalytics />
+
           {children}
 
           <Toaster
@@ -135,6 +140,7 @@ export default function RootLayout({
               },
             }}
           />
+
         </AuthProvider>
       </body>
     </html>
