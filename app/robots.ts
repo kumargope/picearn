@@ -5,15 +5,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-
-      disallow: [
-        "/api/",
-        "/admin/",
-      ],
+      disallow: ["/api/", "/admin/"],
     },
-
-    sitemap: "https://yourdomain.com/sitemap.xml",
-
-    host: "https://yourdomain.com",
+    sitemap: "https://picearn-9xoo.vercel.app/sitemap.xml",
+    host: "https://picearn-9xoo.vercel.app",
   };
 }
