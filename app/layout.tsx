@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://picearn-9xoo.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -83,8 +83,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "PicEarn - Upload Images & Earn Money",
-    description:
-      "Upload images, share links and earn rewards.",
+    description: "Upload images, share links and earn rewards.",
     images: ["/favicon.ico"],
   },
 
@@ -123,7 +122,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <head>
-
         {/* Google AdSense */}
         <Script
           async
@@ -132,22 +130,26 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
 
+        {/* Monetag */}
+        <Script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="266097"
+          strategy="afterInteractive"
+          async
+          data-cfasync="false"
+        />
+
+        {/* Adsterra Popunder */}
+        <Script
+          src="https://pl30679281.effectivecpmnetwork.com/43/71/4a/43714adb689a4277f62c67c2fa508ffc.js"
+          strategy="afterInteractive"
+        />
       </head>
 
       <body className="min-h-screen bg-black text-white">
         <AuthProvider>
-
           {/* Google Analytics */}
           <GoogleAnalytics />
-
-          {/* Monetag */}
-          <Script
-            src="https://quge5.com/88/tag.min.js"
-            data-zone="266097"
-            strategy="afterInteractive"
-            async
-            data-cfasync="false"
-          />
 
           {children}
 
@@ -162,7 +164,6 @@ export default function RootLayout({
               },
             }}
           />
-
         </AuthProvider>
       </body>
     </html>

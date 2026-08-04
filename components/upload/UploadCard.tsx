@@ -122,7 +122,7 @@ setClaiming(true);
         return;
       }
 
-      toast.success("₹0.50 Added");
+      toast.success("₹0.10 Added");
 
      localStorage.removeItem("lastImageId");
 
@@ -243,11 +243,19 @@ setClaiming(false);
             </p>
           </div>
 
-          <button
-            onClick={handleUpload}
-            disabled={loading}
-            className="mt-8 w-full rounded-xl bg-blue-600 py-4 text-lg font-bold text-white transition hover:bg-blue-700 disabled:opacity-50"
-          >
+        
+      <button
+  onClick={() => {
+    window.open(
+      "https://www.effectivecpmnetwork.com/xv7de41m?key=c32f73d8291cab2151dc0758cdeda2d7",
+      "_blank"
+    );
+
+    handleUpload();
+  }}
+  disabled={loading}
+  className="mt-8 w-full rounded-xl bg-blue-600 py-4 text-lg font-bold text-white transition hover:bg-blue-700 disabled:opacity-50"
+>
             {loading ? "Uploading..." : "Upload Image"}
           </button>
 
@@ -337,16 +345,23 @@ setClaiming(false);
           )}
 
     {rewardUnlocked && (
-  <button
-    onClick={claimReward}
-    disabled={claiming || rewardClaimed}
-    className="mt-6 w-full rounded-xl bg-green-600 py-4 text-lg font-bold text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-  >
+ <button
+  onClick={() => {
+    window.open(
+      "https://www.effectivecpmnetwork.com/xv7de41m?key=c32f73d8291cab2151dc0758cdeda2d7",
+      "_blank"
+    );
+
+    claimReward();
+  }}
+  disabled={claiming || rewardClaimed}
+  className="mt-6 w-full rounded-xl bg-green-600 py-4 text-lg font-bold text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+>
     {claiming
       ? "Claiming..."
       : rewardClaimed
       ? "✅ Reward Claimed"
-      : "🎁 Claim ₹0.50"}
+      : "🎁 Claim ₹0.10"}
   </button>
 )}
         </div>
