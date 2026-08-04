@@ -56,37 +56,39 @@ export async function uploadImage(
   // ===============================
   // Save Into Database
   // ===============================
- const { data, error: dbError } = await supabase
-  .from("images")
-  .insert([
-    {
-      user_id: user.id,
-      title: title || file.name,
-description,
-tags,
-category,
-      image_url: publicUrl,
-      slug,
+  const { data, error: dbError } = await supabase
+    .from("images")
+    .insert([
+      {
+        user_id: user.id,
+        title: title || file.name,
+        description,
+        tags,
+        category,
+        image_url: publicUrl,
+        slug,
 
-      views: 0,
-      downloads: 0,
-      reward_points: 0.50,   
+        views: 0,
+        downloads: 0,
 
-      file_size: file.size,
-      mime_type: file.type,
-    },
-  ])
-  .select()
-  .single();
+        // Reward Per Upload
+        reward_points: 0.10,
 
-if (dbError) {
-  console.error(dbError);
-  throw new Error(dbError.message);
-}
+        file_size: file.size,
+        mime_type: file.type,
+      },
+    ])
+    .select()
+    .single();
 
-return {
-  id: data.id,
-  url: publicUrl,
-  slug,
-};
+  if (dbError) {
+    console.error(dbError);
+    throw new Error(dbError.message);
+  }
+
+  return {
+    id: data.id,
+    url: publicUrl,
+    slug,
+  };
 }

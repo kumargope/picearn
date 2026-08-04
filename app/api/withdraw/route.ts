@@ -27,20 +27,20 @@ export async function POST(req: Request) {
     }
 
     //-----------------------------------
-// Minimum Withdraw ₹30
-//-----------------------------------
+    // Minimum Withdraw ₹30
+    //-----------------------------------
 
-if (Number(amount) < 30) {
-  return NextResponse.json(
-    {
-      success: false,
-      error: "Minimum withdrawal amount is ₹30",
-    },
-    {
-      status: 400,
+    if (Number(amount) < 30) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Minimum withdrawal amount is ₹30",
+        },
+        {
+          status: 400,
+        }
+      );
     }
-  );
-}
 
     //-----------------------------------
     // Get Wallet
@@ -79,6 +79,41 @@ if (Number(amount) < 30) {
     }
 
     //-----------------------------------
+    // Check Pending Withdraw Request
+    //-----------------------------------
+
+    const { data: pendingRequest, error: pendingError } = await supabase
+      .from("withdraw_requests")
+      .select("id")
+      .eq("user_id", user_id)
+      .eq("status", "Pending")
+      .maybeSingle();
+
+    if (pendingError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: pendingError.message,
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+
+    if (pendingRequest) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "You already have a pending withdrawal request.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    //-----------------------------------
     // Create Withdraw Request ONLY
     //-----------------------------------
 
@@ -106,15 +141,15 @@ if (Number(amount) < 30) {
     console.log("Withdraw Request Created");
 
     //-----------------------------------
-    // IMPORTANT
-    // Wallet will be deducted ONLY after
-    // Admin clicks Approve
+    // Wallet will be deducted ONLY
+    // after Admin Approves the request
     //-----------------------------------
 
     return NextResponse.json({
       success: true,
       message: "Withdraw Request Submitted",
     });
+
   } catch (err) {
     console.error(err);
 
