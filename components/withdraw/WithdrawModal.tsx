@@ -34,6 +34,11 @@ export default function WithdrawModal({
       return;
     }
 
+    if (value < 30) {
+  toast.error("Minimum withdrawal is ₹30");
+  return;
+}
+
     if (value > (profile?.wallet ?? 0)) {
       toast.error("Insufficient Balance");
       return;

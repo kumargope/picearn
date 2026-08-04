@@ -21,7 +21,22 @@ export async function POST(req: NextRequest) {
   try {
     console.log("========== REFERRAL API ==========");
 
-    const { userId } = await req.json();
+    const {
+  userId,
+ adsCompleted,
+} = await req.json();
+
+if (!adsCompleted) {
+  return NextResponse.json(
+    {
+      success: false,
+      error: "Please watch both ads first.",
+    },
+    {
+      status: 400,
+    }
+  );
+}
 
     console.log("User ID:", userId);
 
