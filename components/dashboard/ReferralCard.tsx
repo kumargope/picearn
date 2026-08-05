@@ -34,6 +34,7 @@ export default function ReferralCard({
 
         body: JSON.stringify({
           userId,
+          adsCompleted: true,
         }),
       });
 

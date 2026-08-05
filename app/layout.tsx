@@ -127,23 +127,23 @@ export default function RootLayout({
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4196196964472021"
           crossOrigin="anonymous"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
 
         {/* Monetag */}
-        <Script
+       {/* <Script
           src="https://quge5.com/88/tag.min.js"
           data-zone="266097"
           strategy="afterInteractive"
           async
           data-cfasync="false"
-        />
+        />*/}
 
         {/* Adsterra Popunder */}
-        <Script
+        {/*<Script
           src="https://pl30679281.effectivecpmnetwork.com/43/71/4a/43714adb689a4277f62c67c2fa508ffc.js"
           strategy="afterInteractive"
-        />
+        />*/}
       </head>
 
       <body className="min-h-screen bg-black text-white">

@@ -15,12 +15,16 @@ const [description, setDescription] = useState("");
 const [tags, setTags] = useState("");
 const [category, setCategory] = useState("Other");
 
-  const [showAd, setShowAd] = useState(false);
-  const [rewardUnlocked, setRewardUnlocked] = useState(false);
-  const [currentAd, setCurrentAd] = useState(1);
-  const [adStep, setAdStep] = useState(1);
+const [showAd, setShowAd] = useState(false);
+const [rewardUnlocked, setRewardUnlocked] = useState(false);
+const [currentAd, setCurrentAd] = useState(1);
 const [claiming, setClaiming] = useState(false);
 const [rewardClaimed, setRewardClaimed] = useState(false);
+const [titleError, setTitleError] = useState("");
+const [descriptionError, setDescriptionError] = useState("");
+const [tagsError, setTagsError] = useState("");
+const [categoryError, setCategoryError] = useState("");
+const [fileError, setFileError] = useState("");
 
 
 
@@ -43,12 +47,49 @@ const [rewardClaimed, setRewardClaimed] = useState(false);
   });
 
   async function handleUpload() {
-    if (!file) {
-      toast.error("Please Select Image");
-      return;
-    }
 
-    try {
+setTitleError("");
+setDescriptionError("");
+setTagsError("");
+setCategoryError("");
+setFileError("");
+
+let hasError = false;
+
+if (!title.trim()) {
+  setTitleError("Please enter image title");
+  hasError = true;
+}
+
+if (!description.trim()) {
+  setDescriptionError("Please enter image description");
+  hasError = true;
+}
+
+if (!tags.trim()) {
+  setTagsError("Please enter image tags");
+  hasError = true;
+}
+
+if (!category || category === "Other") {
+  setCategoryError("Please select image category");
+  hasError = true;
+}
+
+if (!file) {
+  setFileError("Please select an image");
+  hasError = true;
+}
+
+if (hasError) {
+  toast.error("Please fill all required fields");
+  return;
+}
+if (!file) {
+  return;
+}
+
+try {
       setLoading(true);
 
       const result = await uploadImage(
@@ -187,29 +228,63 @@ setClaiming(false);
   placeholder="Image Title"
   value={title}
   onChange={(e) => setTitle(e.target.value)}
-  className="mb-4 w-full rounded-xl bg-zinc-800 p-3 text-white outline-none"
+  className={`mb-2 w-full rounded-xl bg-zinc-800 p-3 text-white outline-none border ${
+titleError
+? "border-red-500"
+: "border-transparent"
+}`}
 />
+{titleError&&(
+<p className="mb-4 text-left text-sm text-red-500">
+{titleError}
+</p>
+)}
 
 <textarea
   placeholder="Image Description"
   value={description}
   onChange={(e) => setDescription(e.target.value)}
-  className="mb-4 h-28 w-full rounded-xl bg-zinc-800 p-3 text-white outline-none"
+  className={`mb-2 h-28 w-full rounded-xl bg-zinc-800 p-3 text-white outline-none border ${
+descriptionError
+? "border-red-500"
+: "border-transparent"
+}`}
 />
+{descriptionError&&(
+<p className="mb-4 text-left text-sm text-red-500">
+{descriptionError}
+</p>
+)}
+
 
 <input
   type="text"
   placeholder="Tags (Example: sunset,nature,wallpaper)"
   value={tags}
   onChange={(e) => setTags(e.target.value)}
-  className="mb-4 w-full rounded-xl bg-zinc-800 p-3 text-white outline-none"
+  className={`mb-2 w-full rounded-xl bg-zinc-800 p-3 text-white outline-none border ${
+tagsError
+? "border-red-500"
+: "border-transparent"
+}`}
 />
+{tagsError&&(
+<p className="mb-4 text-left text-sm text-red-500">
+{tagsError}
+</p>
+)}
 
 <select
   value={category}
   onChange={(e) => setCategory(e.target.value)}
-  className="mb-6 w-full rounded-xl bg-zinc-800 p-3 text-white outline-none"
+  className={`mb-2 w-full rounded-xl bg-zinc-800 p-3 text-white outline-none border ${
+categoryError
+? "border-red-500"
+: "border-transparent"
+}`}
 >
+
+
   <option>Nature</option>
   <option>Animals</option>
   <option>Cars</option>
@@ -226,6 +301,11 @@ setClaiming(false);
   <option>Other</option>
 </select>
 
+{categoryError&&(
+<p className="mb-4 text-left text-sm text-red-500">
+{categoryError}
+</p>
+)}
 
 
             {!file && <input {...getInputProps()} />}
@@ -239,6 +319,11 @@ setClaiming(false);
             </h3>
 
             <p className="mt-3 text-gray-400">
+              {fileError&&(
+<p className="mt-3 text-sm text-red-500">
+{fileError}
+</p>
+)}
               {file ? file.name : "or Click to Select Image"}
             </p>
           </div>
@@ -246,10 +331,10 @@ setClaiming(false);
         
       <button
   onClick={() => {
-    window.open(
-      "https://www.effectivecpmnetwork.com/xv7de41m?key=c32f73d8291cab2151dc0758cdeda2d7",
-      "_blank"
-    );
+   // window.open(
+   //   "https://www.effectivecpmnetwork.com/xv7de41m?key=c32f73d8291cab2151dc0758cdeda2d7",
+   //   "_blank"
+    //);
 
     handleUpload();
   }}
